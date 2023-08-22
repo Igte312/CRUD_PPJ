@@ -43,7 +43,7 @@ public class FormularyAdmin extends JFrame{
         formAdmin.pack();
         formAdmin.setVisible(true);
     }
-    void showData() {
+    void showData() {//------------------------------------------------------------- Tabla
         //esto llena los titulos de la tabla
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Rut");
@@ -77,7 +77,7 @@ public class FormularyAdmin extends JFrame{
 
     }
     public FormularyAdmin(){
-        btn_create.addActionListener(new ActionListener() {
+        btn_create.addActionListener(new ActionListener() {//-------------------------- Crea
             @Override
             public void actionPerformed(ActionEvent e) {
                 userClass user = new userClass(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
@@ -88,18 +88,27 @@ public class FormularyAdmin extends JFrame{
             }
         });
 
-        btn_listar.addActionListener(new ActionListener() {
+        btn_listar.addActionListener(new ActionListener() {//-------------------------- Listar
             @Override
             public void actionPerformed(ActionEvent e) {
                 showData();
             }
         });
 
-        btn_update.addActionListener(new ActionListener() {
+        btn_update.addActionListener(new ActionListener() {//-------------------------- Actualizar
             @Override
             public void actionPerformed(ActionEvent e) {
                 userClass user = new userClass(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
                 boolean result = crudClass.apdateUser(user);
+                showData();
+            }
+        });
+
+        btn_delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean result = crudClass.deleteUser(input_rut.getText());
+                showData();
             }
         });
     }

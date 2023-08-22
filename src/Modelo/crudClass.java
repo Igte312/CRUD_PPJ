@@ -49,13 +49,13 @@ public class crudClass {
         return result;
     }
 
-    public boolean deleteUsuario(String rut) {
+    public boolean deleteUser(String rut) {
         connectionDB connect = new connectionDB();
         connect.connect();
         boolean result = false;
 
         try {
-            result = connect.executeSQL("delete from usuarios where rut = '" + rut + "'");
+            result = connect.executeSQL("delete from users where rut = '" + rut + "'");
         } catch (Exception e) {
             System.out.println("Error en la eliminación " + e);
         }
