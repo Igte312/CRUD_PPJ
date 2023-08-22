@@ -14,7 +14,7 @@ public class crudClass {
                     + user.getLastName() + "','"
                     + user.getPassword() + "','"
                     + user.getAccess() + "')");
-            System.out.println("insert into users values (null,'"
+            System.out.println("insert into users values ('"
                     + user.getRut() + "'" + ",'"
                     + user.getName() + "','"
                     + user.getLastName() + "','"
