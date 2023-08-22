@@ -47,6 +47,7 @@ public class formulario_admin extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 userClass user = new userClass(input_rut.getText(),input_name.getName(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
                 boolean result = crudClass.addUser(user);
+                System.out.println("prueba git!!!");
             }
         });
     }
