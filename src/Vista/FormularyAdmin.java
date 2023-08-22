@@ -98,7 +98,8 @@ public class FormularyAdmin extends JFrame{
         btn_update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                userClass user = new userClass(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
+                boolean result = crudClass.apdateUser(user);
             }
         });
     }

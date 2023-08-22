@@ -27,19 +27,19 @@ public class crudClass {
         return resultado;
     }
 
-    public boolean actualizarUsuario(userClass usuario) {
+    public boolean apdateUser(userClass user) {
         connectionDB connect = new connectionDB();
         connect.connect();
         boolean result = false;
 
         try {
-            result = connect.executeSQL("update usuarios set nombres ="
-                    + "'" + usuario.getName() + "', "
-                    + "apellidos = '" + usuario.getLastName()
-                    + "', contrasena = '" + usuario.getPassword()
-                    + "', acceso = '" + usuario.getAccess()
+            result = connect.executeSQL("update users set name ="
+                    + "'" + user.getName() + "', "
+                    + "last_name = '" + user.getLastName()
+                    + "', password = '" + user.getPassword()
+                    + "', access = '" + user.getAccess()
                     + "' where rut = "
-                    + "'" + usuario.getRut() + "'");
+                    + "'" + user.getRut() + "'");
             result = true;
         } catch (Exception e) {
             System.out.println("Error en la actualización " + e);
