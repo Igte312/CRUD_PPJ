@@ -1,9 +1,17 @@
 package Modelo;
-import Controlador.userClass;
-public class crudClass {
+import Controlador.UserClass;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.SQLException;
 
-    public boolean addUser(userClass user) {
-        connectionDB connect = new connectionDB();
+public class CrudClass {
+
+    public boolean addUser(UserClass user) {
+        ConnectionDB connect = new ConnectionDB();
         connect.connect();
         boolean resultado = false;
 
@@ -27,8 +35,8 @@ public class crudClass {
         return resultado;
     }
 
-    public boolean apdateUser(userClass user) {
-        connectionDB connect = new connectionDB();
+    public boolean apdateUser(UserClass user) {
+        ConnectionDB connect = new ConnectionDB();
         connect.connect();
         boolean result = false;
 
@@ -50,7 +58,7 @@ public class crudClass {
     }
 
     public boolean deleteUser(String rut) {
-        connectionDB connect = new connectionDB();
+        ConnectionDB connect = new ConnectionDB();
         connect.connect();
         boolean result = false;
 
@@ -61,5 +69,29 @@ public class crudClass {
         }
         connect.disconnect();
         return result;
+    }
+
+    public boolean validateDuplicate(String rut) {
+        ConnectionDB connect = new ConnectionDB();
+        Connection cn = connect.connect(); // Obtén la conexión de la forma que estás utilizando
+        boolean exists = false;
+
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM users WHERE rut = '" + rut + "'");
+
+            if (rs.next()) {
+                exists = true; // Si hay un resultado, el RUT existe en la base de datos
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CrudClass.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            connect.disconnect(); // Asegúrate de desconectar la conexión en todos los casos
+        }
+
+        return exists;
     }
 }
