@@ -5,18 +5,22 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Controlador.userClass;
-import Modelo.crudClass;
-import Modelo.connectionDB;
+import Controlador.UserClass;
+import Controlador.ValidationClass;
+import Modelo.CrudClass;
+import Modelo.ConnectionDB;
 import java.sql.*;
+import java.awt.*;
+
 
 public class FormularyAdmin extends JFrame{
 
-    crudClass crudClass = new crudClass();
-    connectionDB conect = new connectionDB();
+    CrudClass crudClass = new CrudClass();
+    ConnectionDB conect = new ConnectionDB();
     Connection cn = conect.connect();
+    ValidationClass validate = new ValidationClass();
 
-    private JPanel panel;
+    public JPanel panel;
     private JLabel label_rut;
     private JTextField input_rut;
     private JLabel label_name;
@@ -34,16 +38,22 @@ public class FormularyAdmin extends JFrame{
     private JTable table;
     private JButton btn_endSession;
     private JButton btn_listar;
+    private JLabel label_rut_error;
+    private JLabel label_rut_error2;
 
+    public JPanel getPanel() {
+        return panel;
+    }
 
     public static void main(String[] args) {
         FormularyAdmin formAdmin = new FormularyAdmin();
         formAdmin.setContentPane(new FormularyAdmin().panel);
         formAdmin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         formAdmin.pack();
+        formAdmin.setSize(800, 600);
         formAdmin.setVisible(true);
     }
-    void showData() {
+    void showData() {//------------------------------------------------------------- Tabla
         //esto llena los titulos de la tabla
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Rut");
@@ -77,28 +87,69 @@ public class FormularyAdmin extends JFrame{
 
     }
     public FormularyAdmin(){
-        btn_create.addActionListener(new ActionListener() {
+        btn_create.addActionListener(new ActionListener() {//-------------------------- Crea
             @Override
             public void actionPerformed(ActionEvent e) {
-                userClass user = new userClass(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
-                boolean result = crudClass.addUser(user);
-                System.out.println(input_name.getText());
-                showData();
-                System.out.println("prueba git!!!");
+                boolean rut;
+                boolean validateNulls;
+                boolean validateDuplicates;
+                //-----------------------------------------------------
+                validateNulls = validate.validateNulls(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText());
+                if (validateNulls){
+                    JOptionPane.showMessageDialog(null, "Llene los campos en blanco", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                }
+                //-----------------------------------------------------
+                rut = validate.validateRut((input_rut.getText()));
+                if (!rut){
+                    label_rut_error.setForeground(Color.RED);
+                    label_rut_error.setText("formato de rut incorrecto");
+                }else{
+                    label_rut_error.setText(null);
+                }
+                //-----------------------------------------------------
+                validateDuplicates = crudClass.validateDuplicate((input_rut.getText()));
+                if (validateDuplicates) {
+                    label_rut_error2.setForeground(Color.RED);
+                    label_rut_error2.setText("El rut ingresado ya existe");
+                }else{
+                    label_rut_error2.setText(null);
+                }
+                //-----------------------------------------------------
+                if (!validateNulls  && rut && !validateDuplicates) {
+                    UserClass user = new UserClass(input_rut.getText(), input_name.getText(), input_lastName.getText(), input_password.getText(), comb_access.getSelectedItem().toString());
+                    boolean result = crudClass.addUser(user);
+                    if (result) {
+                        JOptionPane.showMessageDialog(null, "Se ha ingresado el registro", "OK", JOptionPane.INFORMATION_MESSAGE);
+                        showData();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error. No se pudo ingresar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
+                        showData();
+                    }
+                }
             }
         });
 
-        btn_listar.addActionListener(new ActionListener() {
+        btn_listar.addActionListener(new ActionListener() {//-------------------------- Listar
             @Override
             public void actionPerformed(ActionEvent e) {
                 showData();
             }
         });
 
-        btn_update.addActionListener(new ActionListener() {
+        btn_update.addActionListener(new ActionListener() {//-------------------------- Actualizar
             @Override
             public void actionPerformed(ActionEvent e) {
+                UserClass user = new UserClass(input_rut.getText(),input_name.getText(),input_lastName.getText(),input_password.getText(),comb_access.getSelectedItem().toString());
+                boolean result = crudClass.apdateUser(user);
+                showData();
+            }
+        });
 
+        btn_delete.addActionListener(new ActionListener() {//---------------------------- Eliminar
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean result = crudClass.deleteUser(input_rut.getText());
+                showData();
             }
         });
     }

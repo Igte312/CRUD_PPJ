@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 
 
-public class connectionDB {
+public class ConnectionDB {
     String bd = "crud_ppj";
     String url = "jdbc:mysql://localhost:3306/";
     String user = "root";
@@ -15,7 +15,7 @@ public class connectionDB {
     String driver = "com.mysql.cj.jdbc.Driver"; //Versión 8 (version 5 va sin cj)
     Connection cx;
 
-    public connectionDB() {
+    public ConnectionDB() {
     }
 
     public Connection connect() {
@@ -37,7 +37,7 @@ public class connectionDB {
         }
     }
     public static void main(String[] args) {
-        connectionDB connect = new connectionDB();
+        ConnectionDB connect = new ConnectionDB();
         connect.connect();
     }
     public boolean executeSQL (String QuerySQL){

@@ -1,12 +1,12 @@
 package Controlador;
 
-public class userClass {
+public class UserClass {
     private String rut, name, lastName, password, access;
 
-    public userClass() {
+    public UserClass() {
     }
 
-    public userClass(String rut, String name, String lastName, String password, String access) {
+    public UserClass(String rut, String name, String lastName, String password, String access) {
         this.rut = rut;
         this.name = name;
         this.lastName = lastName;
